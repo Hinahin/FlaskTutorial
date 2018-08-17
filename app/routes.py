@@ -15,10 +15,8 @@ from werkzeug.utils import secure_filename
 def index():
     posts = [
         {'author': {'username': 'Hinahin', 'age': '23'},
-         'text': 'Это мой первый пост!'
+         'text': 'Это небольшой сервис для обработки выгрузок с оценками'
          },
-        {'author': {'username': 'Hinahin', 'age': '23'},
-         'text': 'Это мой второй пост!'}
     ]
     return render_template('index.html', title='My site', posts=posts)
 

@@ -1,18 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Стартовая страница</h1>
-    <p>Привет, {{ current_user.username }}!</p>
-    <p>Теперь ты можешь использовать шаблоны. Ура :)</p>
-    <table border='1px'>
+    <h1 align="center">Стартовая страница</h1>
+    <h2>Привет, {{ current_user.username }}!</h2>
+    <br>
+    <table>
         <tbody>
-        <tr>
-            <th>Автор</th>
-            <th>Текст</th>
-        </tr>
         {% for post in posts %}
         <tr>
-            <td>{{ post.author.username }}</td>
+            <td><b>{{ post.author.username }}: </b></td>
             <td>{{ post.text }}</td>
         </tr>
         {% endfor %}
