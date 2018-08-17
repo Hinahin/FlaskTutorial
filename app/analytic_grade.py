@@ -5,10 +5,7 @@ def get_empty_dict(file_name):
     with open(file_name, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
         row = next(reader)
-        if 'Grade' in row:
-            start_col = row.index('Grade')
-        else:
-            start_col = row.index('grade')
+        start_col = row.index('Grade')
         end_col = row.index('Cohort Name')
         course_dict = {}
         for i in range(start_col, end_col):
@@ -30,6 +27,7 @@ def fillinig_dict(file_name, dict_name='none'):
         dict_name1 = get_empty_dict(file_name)
     else:
         dict_name1 = dict_name
+
     with open(file_name, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:

@@ -125,7 +125,7 @@ def add_report():
         db.session.add(report)
         db.session.commit()
 
-        flash('Данные успешно загружены')
+        flash('Данные успешно добавлены!')
         return redirect(url_for('reports'))
 
     return render_template('add_report.html', title='Добавить отчет', form=form)
