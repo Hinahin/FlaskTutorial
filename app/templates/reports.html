@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='text.css') }}">
+    <script>
+        function confirmDelete(Element){
+            var my_confirm = confirm("Уверен, что удаляем?");
+                if (my_confirm == true){
+                return document.location.href = '/del_nah_report/' + Element.id;
+                }
+            }
+    </script>
+
+    <center><h1>Список отчетов</h1></center>
+    <center><div align="left" style="width:800px;">
+        <a href="{{url_for('add_report')}}">
+            <img src="{{ url_for('static', filename='add.png') }}" width="30" alt="Добавить отчет">
+        </a>
+    </div></center>
+
+
+    {% if reports %}
+
+    <table class="bordered" width="800px">
+        <tbody>
+        <tr>
+            <th>Дата создания</th>
+            <th>Название курса</th>
+            <th>Запуск курса</th>
+            <th>Кто разместил</th>
+            <th>Дата отчета</th>
+            <th>Посмотреть график</th>
+            <th>Удалить запись</th>
+        </tr>
+        {% for report in reports %}
+
+
+        <tr>
+            <td>
+                <script type="text/javascript">
+                document.write(moment("{{ report.date_creation.date() }}", "YYYY-MM-DD").format("DD.MM.YYYY"));
+                </script>
+            </td>
+            <td>{{ report.course_name }}</td>
+            <td>{{ report.session_course }}</td>
+            <td>{{ report.author.username }}</td>
+            <td>
+                <script type="text/javascript">
+                document.write(moment("{{ report.date_report.date() }}", "YYYY-MM-DD").format("DD.MM.YYYY"));
+                </script>
+            </td>
+            <td>
+                <center>
+                <a href="{{ url_for('chart', report_id=report.id) }}">
+                    <img src="{{ url_for('static', filename='document-preview.png') }}" width="25" alt="Просмотреть отчет">
+                </a>
+                </center>
+            </td>
+            <td>
+                <center>
+                    <a id="{{report.id}}" onclick="confirmDelete(this);">
+                        <img src="{{ url_for('static', filename='edit-delete.png') }}" width="25" alt="Удалить отчет">
+                    </a>
+                </center>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Пока нет ни одного отчета</p>
+    {% endif %}
+
+{% endblock %}

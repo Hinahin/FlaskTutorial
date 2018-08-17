@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Добавление нового отчета</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.course_name.label }} <br/>
+            {{ form.course_name(size=64) }} <br/>
+
+            {% for error in form.course_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.session_course.label }} <br/>
+            {{ form.session_course(size=64) }} <br/>
+
+            {% for error in form.session_course.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.date_report.label }} <br/>
+            {{ form.date_report(size=64) }} <br/>
+
+            {% for error in form.date_report.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.file_report.label }} <br/>
+            {{ form.file_report(size=64) }} <br/>
+
+            {% for error in form.file_report.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.submit() }}
+        </p>
+    </form>
+
+{% endblock %}

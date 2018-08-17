@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Стартовая страница</h1>
+    <p>Привет, {{ current_user.username }}!</p>
+    <p>Теперь ты можешь использовать шаблоны. Ура :)</p>
+    <table border='1px'>
+        <tbody>
+        <tr>
+            <th>Автор</th>
+            <th>Текст</th>
+        </tr>
+        {% for post in posts %}
+        <tr>
+            <td>{{ post.author.username }}</td>
+            <td>{{ post.text }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

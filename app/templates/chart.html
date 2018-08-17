@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="{{ url_for('static', filename='highcharts.js') }}"></script>
+<script src="{{ url_for('static', filename='exporting.js') }}"></script>
+<script src="{{ url_for('static', filename='export-data.js') }}"></script>
+
+<div id="container" style="min-width: 600px; height: 800px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+	Highcharts.chart('container', {
+  chart: {
+    type: 'column'
+  },
+  title: {
+    text: '{{ x_title }}'
+  },
+  xAxis: {
+    categories:
+    [
+    {% for categorie in categories %}
+    '{{ categorie }}',
+    {% endfor %}
+        ]
+  },
+  yAxis: {
+    min: 0,
+    title: {
+      text: 'Количество слушателей'
+    },
+    stackLabels: {
+      enabled: true,
+      style: {
+        fontWeight: 'bold',
+        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+      }
+    }
+  },
+  legend: {
+    align: 'right',
+    x: -30,
+    verticalAlign: 'top',
+    y: 25,
+    floating: true,
+    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+    borderColor: '#CCC',
+    borderWidth: 1,
+    shadow: false
+  },
+  tooltip: {
+    headerFormat: '<b>{point.x}</b><br/>',
+    pointFormat: '{series.name}: {point.y}<br/>Всего: {point.stackTotal}'
+  },
+  plotOptions: {
+    column: {
+      stacking: 'normal',
+      dataLabels: {
+        enabled: true,
+        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+      }
+    }
+  },
+  series: [{
+    name: 'Отлично',
+    data: [
+            {% for grade in excellent %}
+            {{ grade }},
+            {% endfor %}
+            ]
+  }, {
+    name: 'Хорошо',
+    data: [
+            {% for grade in good %}
+            {{ grade }},
+            {% endfor %}
+            ]
+  }, {
+    name: 'Удовлетворительно',
+    data: [
+            {% for grade in bad %}
+            {{ grade }},
+            {% endfor %}
+            ]
+  }, {
+    name: 'Неудовлетворительно',
+    data: [
+            {% for grade in fail %}
+            {{ grade }},
+            {% endfor %}
+            ]
+    }
+    ]
+});
+</script>
+{% endblock %}
