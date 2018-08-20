@@ -132,7 +132,7 @@ def add_report():
 @app.route('/reports')
 @login_required
 def reports():
-    my_reports = GradeReport.query.all()
+    my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc()).all()
     return render_template('reports.html', reports=my_reports)
 
 
