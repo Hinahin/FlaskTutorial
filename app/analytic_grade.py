@@ -10,7 +10,10 @@ def get_empty_dict(file_name):
         else:
             start_col = row.index('grade')
         # start_col = row.index('Grade')
-        end_col = row.index('Cohort Name')
+        if 'Cohort Name' in row:
+            end_col = row.index('Cohort Name')
+        else:
+            end_col = row.index('Enrollment Track')
         course_dict = {}
         for i in range(start_col, end_col):
             if row[i] == 'Grade Percent' or 'Avg' in row[i] or 'None' in row[i]:
