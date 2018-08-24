@@ -31,9 +31,7 @@ class RegistrationForm(FlaskForm):
 
 
 class GradeReportForm(FlaskForm):
-    course_name = StringField('Название курса', validators=[DataRequired()])
-    session_course = StringField('Запуск курса', validators=[DataRequired()])
-    date_report = DateField('Дата выгрузки', format='%d.%m.%Y', validators=[DataRequired()])
+
     file_report = FileField('Файл для загрузки(.csv)', validators=[FileRequired(),
                                                                    FileAllowed(['csv'],
                                                                                'CSV Only')

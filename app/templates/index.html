@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 align="center">Стартовая страница</h1>
-    <h2>Привет, {{ current_user.username }}!</h2>
-    <br>
-    <table>
-        <tbody>
+    <div class="container page-header">
+        <h1>Стартовая страница</h1>
+    </div>
+    <div class="container">
         {% for post in posts %}
-        <tr>
-            <td><b>{{ post.author.username }}: </b></td>
-            <td>{{ post.text }}</td>
-        </tr>
+        <div class="container">
+            <p><b>{{ post.author.username }}:</b></p>
+            <p>{{ post.text }}</p>
+        </div>
         {% endfor %}
-        </tbody>
+
+    </div>
     </table>
 {% endblock %}

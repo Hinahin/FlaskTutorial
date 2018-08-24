@@ -91,39 +91,50 @@ def add_report():
     form = GradeReportForm()
     if form.validate_on_submit():
         report = GradeReport()
-        report.course_name = form.course_name.data
-        report.session_course = form.session_course.data
-        report.date_report = form.date_report.data
 
         file_report = secure_filename(form.file_report.data.filename)
         file_dir = os.path.join(app.root_path, 'uploads', file_report)
         form.file_report.data.save(file_dir)
 
-        grade_dict = ag.fillinig_dict(os.path.join(app.root_path, 'uploads', file_report))
-        categories = []
-        excellent = []
-        good = []
-        bad = []
-        fail = []
-        for test in grade_dict.keys():
-            categories.append(test)
-            excellent.append(grade_dict[test]['Отлично'])
-            good.append(grade_dict[test]['Хорошо'])
-            bad.append(grade_dict[test]['Удовлетворительно'])
-            fail.append(grade_dict[test]['Неудовлетворительно'])
+        try:
+            data_list = ag.data_from_filename(file_report)
 
-        report.tests_names = str(categories)
-        report.a_grade = str(excellent)
-        report.b_grade = str(good)
-        report.c_grade = str(bad)
-        report.f_grade = str(fail)
+            report.course_name = data_list[0]           # Название курса
+            report.session_course = data_list[1]        # Название сессии
+            report.date_report = data_list[2]           # Дата выгрузки объект Date, не строка
+        except:
+            flash('Неправильное имя файла')
+            return redirect(url_for('add_report'))
+
+        try:
+            grade_dict = ag.fillinig_dict(os.path.join(app.root_path, 'uploads', file_report))
+            categories = []
+            excellent = []
+            good = []
+            bad = []
+            fail = []
+            for test in grade_dict.keys():
+                categories.append(test)
+                excellent.append(grade_dict[test]['Отлично'])
+                good.append(grade_dict[test]['Хорошо'])
+                bad.append(grade_dict[test]['Удовлетворительно'])
+                fail.append(grade_dict[test]['Неудовлетворительно'])
+
+            report.tests_names = str(categories)
+            report.a_grade = str(excellent)
+            report.b_grade = str(good)
+            report.c_grade = str(bad)
+            report.f_grade = str(fail)
+        except:
+            flash('Не верная структура файла')
+            return redirect(url_for('add_report'))
 
         report.user_id = current_user.id
 
         db.session.add(report)
         db.session.commit()
 
-        flash('Данные успешно добавлены!')
+        flash('Данные успешно добавлены')
         return redirect(url_for('reports'))
 
     return render_template('add_report.html', title='Добавить отчет', form=form)

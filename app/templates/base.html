@@ -1,38 +1,54 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
+    <head>
+        <meta charset="UTF-8">
 
-    {% if title %}
-        <title>{{ title }}</title>
-    {% else %}
-        <title>Welcome to my MicroBlog</title>
-    {% endif %}
-    <script src="{{ url_for('static', filename='moment.js') }}" type="text/javascript"></script>
-</head>
-<body>
-    <div>
-        Структура сайта:
-        <a href="{{ url_for('index') }}">Домой</a>
-        <a href="{{ url_for('reports') }}">Список отчетов</a>
-        {% if current_user.is_anonymous %}
-        <a href="{{ url_for('login') }}">Войти</a>
+        {% if title %}
+            <title>{{ title }}</title>
         {% else %}
-        <a href="{{ url_for('logout') }}">Выйти</a>
+            <title>Сервис аналитики</title>
         {% endif %}
-    </div>
-    <hr/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}" type="text/javascript"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.js') }}" type="text/javascript"></script>
+        <script src="{{ url_for('static', filename='moment.js') }}" type="text/javascript"></script>
+    </head>
+
+    <body style="padding-top: 50px" >
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav navbar-left">
+                <li><a href="{{ url_for('index') }}">Домой</a></li>
+                <li><a href="{{ url_for('reports') }}">Список отчетов</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_anonymous %}
+                    <li><a href="{{ url_for('login') }}">Войти</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('logout') }}">{{ current_user.username }} (Выйти)</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </nav>
+
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>
+        {% for message in messages %}
+
+            <div class="alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
                 {{ message }}
-            </li>
-            {% endfor %}
-        </ul>
+            </div>
+        {% endfor %}
     {% endif %}
     {% endwith %}
+
     {% block content %} {% endblock %}
 </body>
 </html>
