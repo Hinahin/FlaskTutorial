@@ -113,7 +113,7 @@ def data_from_filename(file_name):
     final_list.append(course_dict[data_list[1]])                                    # название курса
     final_list.append(data_list[2] + '_' + data_list[3])                            # сессия курса
     data_list = data_list[-1].split(sep='-')
-    data_report = date(int(data_list[0]), int(data_list[1]), int(data_list[2]))
+    data_report = date(int(data_list[0]), int(data_list[1]), int(data_list[2]))     # создаем объект Date
     final_list.append(data_report)
     return final_list
 
