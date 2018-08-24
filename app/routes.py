@@ -151,9 +151,14 @@ def reports(page=1):
     q = request.args.get('q')
 
     if q:
-        my_reports = GradeReport.query.filter(GradeReport.course_name.contains(q) | GradeReport.session_course.contains(q)).paginate(page, reports_per_page, False)
+        my_reports = GradeReport.query.filter(GradeReport.course_name.contains(q) |
+                                              GradeReport.session_course.contains(q)).paginate(page,
+                                                                                               reports_per_page,
+                                                                                               False)
     else:
-        my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc()).paginate(page, reports_per_page, False)
+        my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc()).paginate(page,
+                                                                                           reports_per_page,
+                                                                                           False)
 
     if my_reports.total != 0:
 

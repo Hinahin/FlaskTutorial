@@ -42,11 +42,11 @@ def fillinig_dict(file_name, dict_name='none'):
             for i in dict_name1:
                 if row[i] == 'Not Available' or row[i] == 'Not Attempted' or row[i] == 'None':
                     dict_name1[i]['Не приступал'] -= 1
-                elif float(row[i]) > 0.0 and float(row[i]) < 0.4:
+                elif 0.0 < float(row[i]) < 0.4:
                     dict_name1[i]['Неудовлетворительно'] += 1
-                elif float(row[i]) >= 0.4 and float(row[i]) < 0.6:
+                elif 0.4 <= float(row[i]) < 0.6:
                     dict_name1[i]['Удовлетворительно'] += 1
-                elif float(row[i]) >= 0.6 and float(row[i]) < 0.8:
+                elif 0.6 <= float(row[i]) < 0.8:
                     dict_name1[i]['Хорошо'] += 1
                 elif float(row[i]) >= 0.8:
                     dict_name1[i]['Отлично'] += 1
@@ -116,4 +116,3 @@ def data_from_filename(file_name):
     data_report = date(int(data_list[0]), int(data_list[1]), int(data_list[2]))     # создаем объект Date
     final_list.append(data_report)
     return final_list
-
