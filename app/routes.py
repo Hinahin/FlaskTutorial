@@ -147,12 +147,24 @@ def add_report():
 @login_required
 def reports(page=1):
     reports_per_page = 10
-    my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc()).paginate(page, reports_per_page, False)
-    if (my_reports.total % reports_per_page) == 0:
-        count_reports = range(my_reports.total / reports_per_page)
-    else:
-        count_reports = range((my_reports.total // reports_per_page) + 1)
     current_page = page
+    q = request.args.get('q')
+
+    if q:
+        my_reports = GradeReport.query.filter(GradeReport.course_name.contains(q) | GradeReport.session_course.contains(q)).paginate(page, reports_per_page, False)
+    else:
+        my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc()).paginate(page, reports_per_page, False)
+
+    if my_reports.total != 0:
+
+        if (my_reports.total % reports_per_page) == 0:
+            count_reports = range(my_reports.total / reports_per_page)
+        else:
+            count_reports = range((my_reports.total // reports_per_page) + 1)
+
+    else:
+        count_reports = range(1)
+
     return render_template('reports.html',
                            reports=my_reports,
                            count_pages=count_reports,

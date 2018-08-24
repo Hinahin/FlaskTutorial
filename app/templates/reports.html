@@ -18,21 +18,26 @@
         <a href="{{url_for('add_report')}}">
             <img src="{{ url_for('static', filename='add.png') }}" width="30" alt="Добавить отчет">
         </a>
+        <form class="navbar-form navbar-right" role="search" method="GET">
+            <div class="form-group">
+                <input style="width: 300px" type="text" class="form-control" placeholder="Название курса или запуск" name="q" value="{{ request.args.get('q', '') }}">
+            </div>
+            <button type="submit" class="btn btn-default">Фильтр</button>
+        </form>
     </div>
-
 
     {% if reports %}
     <div class="container">
     <table class="bordered" width="100%">
         <tbody>
         <tr>
-            <th>Дата создания</th>
-            <th>Название курса</th>
-            <th>Запуск курса</th>
-            <th>Кто разместил</th>
-            <th>Дата отчета</th>
-            <th>Посмотреть график</th>
-            <th>Удалить запись</th>
+            <th width="10%">Дата создания</th>
+            <th width="39%">Название курса</th>
+            <th width="11%">Запуск курса</th>
+            <th width="10%">Кто разместил</th>
+            <th width="10%">Дата отчета</th>
+            <th width="10%">Посмотреть график</th>
+            <th width="10%">Удалить запись</th>
         </tr>
 
         <!-- reports is a Paginate object -->
@@ -40,7 +45,7 @@
 
 
         <tr>
-            <td width="93px">
+            <td>
                 <script type="text/javascript">
                 document.write(moment("{{ report.date_creation.date() }}", "YYYY-MM-DD").format("DD.MM.YYYY"));
                 </script>
@@ -53,14 +58,14 @@
                 document.write(moment("{{ report.date_report.date() }}", "YYYY-MM-DD").format("DD.MM.YYYY"));
                 </script>
             </td>
-            <td width="146px">
+            <td>
                 <center>
                 <a href="{{ url_for('chart', report_id=report.id) }}">
                     <img src="{{ url_for('static', filename='document-preview.png') }}" width="25" alt="Просмотреть отчет">
                 </a>
                 </center>
             </td>
-            <td width="119px">
+            <td>
                 <center>
                     <a id="{{report.id}}" onclick="confirmDelete(this);">
                         <img src="{{ url_for('static', filename='edit-delete.png') }}" width="25" alt="Удалить отчет">
