@@ -127,7 +127,7 @@ def add_report():
             report.c_grade = str(bad)
             report.f_grade = str(fail)
         except:
-            flash('Не верная структура файла')
+            flash('Нарушена структура файла')
             os.remove(file_dir)
             return redirect(url_for('add_report'))
 
