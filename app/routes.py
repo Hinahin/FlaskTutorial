@@ -92,9 +92,9 @@ def add_report():
     if form.validate_on_submit():
         report = GradeReport()
 
-        file_report = secure_filename(form.file_report.data.filename)
-        file_dir = os.path.join(app.root_path, 'uploads', file_report)
-        form.file_report.data.save(file_dir)
+        file_report = secure_filename(form.file_report.data.filename)   # получаем имя файла
+        file_dir = os.path.join(app.root_path, 'uploads', file_report)  # получаем путь для сохранения
+        form.file_report.data.save(file_dir)                            # сохраняем файл
 
         try:
             data_list = ag.data_from_filename(file_report)
@@ -104,6 +104,7 @@ def add_report():
             report.date_report = data_list[2]           # Дата выгрузки объект Date, не строка
         except:
             flash('Неправильное имя файла')
+            os.remove(file_dir)
             return redirect(url_for('add_report'))
 
         try:
@@ -127,6 +128,7 @@ def add_report():
             report.f_grade = str(fail)
         except:
             flash('Не верная структура файла')
+            os.remove(file_dir)
             return redirect(url_for('add_report'))
 
         report.user_id = current_user.id
@@ -141,10 +143,21 @@ def add_report():
 
 
 @app.route('/reports')
+@app.route('/reports/<int:page>')
 @login_required
-def reports():
-    my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc()).all()
-    return render_template('reports.html', reports=my_reports)
+def reports(page=1):
+    reports_per_page = 10
+    my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc()).paginate(page, reports_per_page, False)
+    if (my_reports.total % reports_per_page) == 0:
+        count_reports = range(my_reports.total / reports_per_page)
+    else:
+        count_reports = range((my_reports.total // reports_per_page) + 1)
+    current_page = page
+    return render_template('reports.html',
+                           reports=my_reports,
+                           count_pages=count_reports,
+                           current_page=current_page
+                           )
 
 
 @app.route('/del_nah_report/<int:report_id>')
