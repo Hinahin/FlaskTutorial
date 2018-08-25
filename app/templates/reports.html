@@ -50,7 +50,7 @@
                 document.write(moment("{{ report.date_creation.date() }}", "YYYY-MM-DD").format("DD.MM.YYYY"));
                 </script>
             </td>
-            <td>{{ report.course_name[0].title() + report.course_name[1:] }}</td>
+            <td>{{ report.course_name.capitalize() }}</td>
             <td>{{ report.session_course }}</td>
             <td>{{ report.author.username.title() }}</td>
             <td>
