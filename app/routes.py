@@ -142,39 +142,28 @@ def add_report():
     return render_template('add_report.html', title='Добавить отчет', form=form)
 
 
-@app.route('/reports')
-@app.route('/reports/<int:page>')
+@app.route('/reports/')
 @login_required
-def reports(page=1):
-    reports_per_page = 10
-    current_page = page
+def reports():
+    reports_per_page = 2
     q = request.args.get('q')
+    page = request.args.get('page')
+
+    if page and page.isdigit():
+        page = int(page)
+    else:
+        page = 1
 
     if q:
         q = q.lower()
         my_reports = GradeReport.query.filter(GradeReport.course_name.contains(q) |
-                                              GradeReport.session_course.contains(q)).paginate(page,
-                                                                                               reports_per_page,
-                                                                                               False)
+                                              GradeReport.session_course.contains(q))
     else:
-        my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc()).paginate(page,
-                                                                                           reports_per_page,
-                                                                                           False)
+        my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc())
 
-    if my_reports.total != 0:
+    page_reports = my_reports.paginate(page, reports_per_page, False)
 
-        if (my_reports.total % reports_per_page) == 0:
-            count_reports = range(my_reports.total // reports_per_page)
-        else:
-            count_reports = range((my_reports.total // reports_per_page) + 1)
-    else:
-        count_reports = range(1)
-
-    return render_template('reports.html',
-                           reports=my_reports,
-                           count_pages=count_reports,
-                           current_page=current_page
-                           )
+    return render_template('reports.html', reports=page_reports)
 
 
 @app.route('/del_nah_report/<int:report_id>')
