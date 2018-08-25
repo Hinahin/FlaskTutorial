@@ -26,7 +26,7 @@
                 {% if current_user.is_anonymous %}
                     <li><a href="{{ url_for('login') }}">Войти</a></li>
                 {% else %}
-                    <li><a href="{{ url_for('logout') }}">{{ current_user.username }} (Выйти)</a></li>
+                    <li><a href="{{ url_for('logout') }}">{{ current_user.username.title() }} (Выйти)</a></li>
                 {% endif %}
             </ul>
         </div>

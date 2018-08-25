@@ -51,7 +51,7 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(username=form.username.data.lower()).first()
         if user is None or not user.check_password(form.password.data):
             flash('Промазал. Попробуй еще раз.')
             return redirect(url_for('index'))
@@ -76,8 +76,8 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User()
-        user.username = form.username.data
-        user.email = form.email.data
+        user.username = form.username.data.lower()
+        user.email = form.email.data.lower()
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -151,6 +151,7 @@ def reports(page=1):
     q = request.args.get('q')
 
     if q:
+        q = q.lower()
         my_reports = GradeReport.query.filter(GradeReport.course_name.contains(q) |
                                               GradeReport.session_course.contains(q)).paginate(page,
                                                                                                reports_per_page,
@@ -163,10 +164,9 @@ def reports(page=1):
     if my_reports.total != 0:
 
         if (my_reports.total % reports_per_page) == 0:
-            count_reports = range(my_reports.total / reports_per_page)
+            count_reports = range(my_reports.total // reports_per_page)
         else:
             count_reports = range((my_reports.total // reports_per_page) + 1)
-
     else:
         count_reports = range(1)
 
