@@ -145,7 +145,7 @@ def add_report():
 @app.route('/reports/')
 @login_required
 def reports():
-    reports_per_page = 2
+    reports_per_page = 10
     q = request.args.get('q')
     page = request.args.get('page')
 
