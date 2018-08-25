@@ -53,7 +53,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data.lower()).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Промазал. Попробуй еще раз.')
+            flash('Промазал. Попробуй еще раз.', 'warning')
             return redirect(url_for('index'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
@@ -81,7 +81,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Поздравляем с успешной регистрацией!')
+        flash('Поздравляем с успешной регистрацией!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -103,7 +103,7 @@ def add_report():
             report.session_course = data_list[1]        # Название сессии
             report.date_report = data_list[2]           # Дата выгрузки объект Date, не строка
         except:
-            flash('Неправильное имя файла')
+            flash('Неправильное имя файла', 'danger')
             os.remove(file_dir)
             return redirect(url_for('add_report'))
 
@@ -127,7 +127,7 @@ def add_report():
             report.c_grade = str(bad)
             report.f_grade = str(fail)
         except:
-            flash('Нарушена структура файла')
+            flash('Нарушена структура файла', 'danger')
             os.remove(file_dir)
             return redirect(url_for('add_report'))
 
@@ -136,7 +136,7 @@ def add_report():
         db.session.add(report)
         db.session.commit()
 
-        flash('Данные успешно добавлены')
+        flash('Данные успешно добавлены', 'success')
         return redirect(url_for('reports'))
 
     return render_template('add_report.html', title='Добавить отчет', form=form)
@@ -172,5 +172,5 @@ def del_report(report_id):
     report = GradeReport.query.filter_by(id=report_id).first_or_404()
     db.session.delete(report)
     db.session.commit()
-    flash('Запись успешно удалена')
+    flash('Запись успешно удалена', 'success')
     return redirect(url_for('reports'))
