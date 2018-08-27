@@ -159,7 +159,7 @@ def reports():
         my_reports = GradeReport.query.filter(GradeReport.course_name.contains(q) |
                                               GradeReport.session_course.contains(q)).order_by(GradeReport.date_report.desc())
     else:
-        my_reports = GradeReport.query.order_by(GradeReport.date_report.desc())
+        my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc())
 
     page_reports = my_reports.paginate(page, reports_per_page, False)
 
