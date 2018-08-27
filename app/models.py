@@ -40,7 +40,7 @@ def load_user(m_id):
 
 class GradeReport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    course_name = db.Column(db.String(100))
+    course_name = db.Column(db.String(500))
     session_course = db.Column(db.String(20))
     date_report = db.Column(db.DateTime, index=True)
     date_creation = db.Column(db.DateTime, index=True, default=datetime.utcnow)

@@ -157,7 +157,7 @@ def reports():
     if q:
         q = q.lower()
         my_reports = GradeReport.query.filter(GradeReport.course_name.contains(q) |
-                                              GradeReport.session_course.contains(q))
+                                              GradeReport.session_course.contains(q)).orede_by(GradeReport.date_report.desc())
     else:
         my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc())
 
