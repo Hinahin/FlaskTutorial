@@ -108,7 +108,7 @@ def add_report():
             return redirect(url_for('add_report'))
 
         try:
-            grade_dict = ag.fillinig_dict(os.path.join(app.root_path, 'uploads', file_report))
+            grade_dict = ag.fillinig_dict(file_dir)     # os.path.join(app.root_path, 'uploads', file_report)
             categories = []
             excellent = []
             good = []
