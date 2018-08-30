@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for, request
 from . import analytic_grade as ag
 from app.forms import LoginForm, RegistrationForm, GradeReportForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, GradeReport
+from app.models import User, GradeReport, Platform, CourseList
 from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 
@@ -175,3 +175,14 @@ def del_report(report_id):
     db.session.commit()
     flash('Запись успешно удалена', 'success')
     return redirect(url_for('reports'))
+
+
+@app.route('/course_info/')
+@login_required
+def course_info():
+    platform_list = Platform.query.all()
+    course_list = CourseList.query.all()
+    return render_template('course_info.html',
+                           title='Course info',
+                           platform_list=platform_list,
+                           course_list=course_list)

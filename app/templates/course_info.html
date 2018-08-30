@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="col-md-3">
+    <ul class="list-group">
+        {% for platform in platform_list %}
+            <li class="list-group-item">{{ platform.name }}
+            {% for course in course_list %}
+                <ul class="list-group">
+                {% if course.platform_id == platform.id %}
+                        <li class="list-group-item"> {{ course.course_name.capitalize() }}</li>
+                {% endif %}
+                </ul>
+            {% endfor %}
+        {% endfor %}
+            </li>
+    </ul>
+</div>
+
+<div class="col-md-9">
+    <h1>Инженерная механика</h1>
+    <div class="col-md-offset-2 col-md-2">
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Сроки запуска курса:</strong></li>
+            <li class="list-group-item"><strong>Количество слушателей:</strong></li>
+            <li class="list-group-item"><strong>Количество платных:</strong></li>
+            <li class="list-group-item"><strong>Количество студентов:</strong></li>
+        </ul>
+    </div>
+    <div class="col-md-3">
+        <ul class="list-group">
+            <li class="list-group-item">11 сентября 2018 - 04 февраля 2019 </li>
+            <li class="list-group-item">5034</li>
+            <li class="list-group-item">124</li>
+            <li class="list-group-item">800</li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <h4>Доступные выгрузки по курсу</h4>
+        <ul>
+            <li>fall_2018 - 10.09.2018 (Посмотреть график)</li>
+            <li>fall_2018 - 17.09.2018 (Посмотреть график)</li>
+            <li>fall_2018 - 24.09.2018 (Посмотреть график)</li>
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}
