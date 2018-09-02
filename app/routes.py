@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for, request
 from . import analytic_grade as ag
 from app.forms import LoginForm, RegistrationForm, GradeReportForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, GradeReport, Platform, CourseList
+from app.models import User, GradeReport, Platform, CourseList, SessionList
 from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 
@@ -100,8 +100,27 @@ def add_report():
         try:
             data_list = ag.data_from_filename(file_report)
 
-            report.course_name = data_list[0]           # Название курса
-            report.session_course = data_list[1]        # Название сессии
+            course = CourseList.query.filter(CourseList.course_code.contains(data_list[0])).first()
+            # report.course_name = data_list[0]           # Шифр курса
+            report.course_name = course.course_name
+            session = SessionList.query.filter(SessionList.id_course_name == course.id and
+                                               SessionList.session_name == data_list[1]).first()
+
+            if session:
+                report.session_id = session.id
+            else:
+                new_session = SessionList()
+                new_session.session_name = data_list[1]
+                new_session.id_course_name = course.id
+                db.session.add(new_session)
+                db.session.commit()
+
+                session = SessionList.query.filter(SessionList.id_course_name == course.id and
+                                                   SessionList.session_name == data_list[1]).first()
+
+            # report.session_course = data_list[1]        # Название сессии
+            report.session_id = session.id
+
             report.date_report = data_list[2]           # Дата выгрузки объект Date, не строка
         except:
             flash('Неправильное имя файла', 'danger')
@@ -157,8 +176,8 @@ def reports():
 
     if q:
         q = q.lower()
-        my_reports = GradeReport.query.filter(GradeReport.course_name.contains(q) |
-                                              GradeReport.session_course.contains(q)).order_by(GradeReport.date_report.desc())
+        my_reports = GradeReport.query.join(SessionList, GradeReport.session_id == SessionList.id).filter(SessionList.session_name.contains(q) |
+                                                                                                          GradeReport.course_name.contains(q)).order_by(GradeReport.date_report.desc())
     else:
         my_reports = GradeReport.query.order_by(GradeReport.date_creation.desc())
 

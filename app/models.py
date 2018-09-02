@@ -41,7 +41,7 @@ def load_user(m_id):
 class GradeReport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     course_name = db.Column(db.String(500))
-    session_course = db.Column(db.String(20))
+    session_id = db.Column(db.Integer, db.ForeignKey('session_list.id'))
     date_report = db.Column(db.DateTime, index=True)
     date_creation = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -81,7 +81,8 @@ class SessionList(db.Model):
     session_start_date = db.Column(db.Date, index=True)
     session_end_date = db.Column(db.Date, index=True)
     id_course_name = db.Column(db.Integer, db.ForeignKey('course_list.id'))
-    session_info = db.relationship('SessionInfo', backref='session_name', lazy='dynamic')
+    session_info = db.relationship('SessionInfo', backref='session', lazy='dynamic')
+    grade_reports = db.relationship('GradeReport', backref='session', lazy='dynamic')
 
     def __repr__(self):
         return 'Сессия: {}'.format(self.session_name)
