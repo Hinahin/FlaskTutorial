@@ -50,6 +50,7 @@ class GradeReport(db.Model):
     b_grade = db.Column(db.String(500))
     c_grade = db.Column(db.String(500))
     f_grade = db.Column(db.String(500))
+    file_dir = db.Column(db.String(500))
 
     def __repr__(self):
         return 'Курс "{}", запуск {}'.format(self.course_name, self.session_course)

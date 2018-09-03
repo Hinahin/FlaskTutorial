@@ -146,6 +146,7 @@ def add_report():
             report.b_grade = str(good)
             report.c_grade = str(bad)
             report.f_grade = str(fail)
+            report.file_dir = str(file_dir)
         except:
             flash('Нарушена структура файла', 'danger')
             os.remove(file_dir)
