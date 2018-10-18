@@ -2,6 +2,26 @@ import csv
 from datetime import date
 
 
+def stud_counts(file_name):
+    with open(file_name, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        st_count = 0
+        st_vf = 0
+        st_st = 0
+        for row in reader:
+            st_count += 1
+            if row['Enrollment Track'] == 'verified':
+                st_vf += 1
+            if row['Cohort Name'] != 'Default Group' and\
+                    row['Cohort Name'] != 'verified' and\
+                    row['Cohort Name'] != 'Группа по умолчанию':   # or 'verified' or 'Группа по умолчанию'
+                st_st += 1
+
+        print('Количество слушателей на курсе:', st_count)
+        print('Количество слушателей на треке с прокторингом:', st_vf)
+        print('Количество студентов УрФУ:', st_st)
+
+
 def get_empty_dict(file_name):
     with open(file_name, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
@@ -143,3 +163,5 @@ def data_from_filename(file_name):
     data_report = date(int(data_list[0]), int(data_list[1]), int(data_list[2]))             # создаем объект Date
     final_list.append(data_report)
     return final_list
+
+# stud_counts('engm.csv')
