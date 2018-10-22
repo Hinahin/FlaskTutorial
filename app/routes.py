@@ -103,8 +103,8 @@ def add_report():
             course = CourseList.query.filter(CourseList.course_code.contains(data_list[0])).first()
             # report.course_name = data_list[0]           # Шифр курса
             report.course_name = course.course_name
-            session = SessionList.query.filter(SessionList.id_course_name == course.id and
-                                               SessionList.session_name == data_list[1]).first()
+
+            session = SessionList.query.filter_by(id_course_name=course.id).filter_by(session_name=data_list[1]).first()
 
             if session:
                 report.session_id = session.id
@@ -115,8 +115,7 @@ def add_report():
                 db.session.add(new_session)
                 db.session.commit()
 
-                session = SessionList.query.filter(SessionList.id_course_name == course.id and
-                                                   SessionList.session_name == data_list[1]).first()
+                session = SessionList.query.filter_by(id_course_name=course.id).filter_by(session_name=data_list[1]).first()
 
             # report.session_course = data_list[1]        # Название сессии
             report.session_id = session.id
@@ -197,12 +196,37 @@ def del_report(report_id):
     return redirect(url_for('reports'))
 
 
-@app.route('/course_info/')
+@app.route('/courses_list/')
 @login_required
-def course_info():
+def courses_list():
     platform_list = Platform.query.all()
     course_list = CourseList.query.all()
-    return render_template('course_info.html',
+    return render_template('courses_list.html',
                            title='Course info',
                            platform_list=platform_list,
-                           course_list=course_list)
+                           course_list=course_list,
+                           )
+
+
+@app.route('/course_info/<int:course_id>')
+@login_required
+def course_info(course_id):
+    course_name = CourseList.query.filter_by(id=course_id).first().course_name
+    platform_list = Platform.query.all()
+    course_list = CourseList.query.all()
+    reports_list = GradeReport.query.join(SessionList, GradeReport.session_id == SessionList.id).filter_by(id_course_name=course_id).order_by(GradeReport.date_report.desc()).all()
+
+    last_report = GradeReport.query.join(SessionList, GradeReport.session_id == SessionList.id).filter_by(id_course_name=course_id).order_by(GradeReport.date_report.desc()).first()
+    session = SessionList.query.filter_by(id_course_name=course_id).order_by(SessionList.id.desc()).first()
+    session_name = session.session_name
+    time_report = last_report.date_report
+    stud_list = ag.stud_counts(last_report.file_dir)
+    return render_template('course_info.html',
+                           title='Course info',
+                           course_name=course_name,
+                           session_name=session_name,
+                           time_report=time_report,
+                           platform_list=platform_list,
+                           course_list=course_list,
+                           stud_list=stud_list,
+                           reports_list=reports_list)

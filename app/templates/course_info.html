@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<link rel="stylesheet" href="{{ url_for('static', filename='text.css') }}">
 
 <div class="col-md-3">
     <ul class="list-group">
@@ -10,7 +10,7 @@
             {% for course in course_list %}
                 <ul class="list-group">
                 {% if course.platform_id == platform.id %}
-                        <li class="list-group-item"> {{ course.course_name.capitalize() }}</li>
+                        <li class="list-group-item"><a href="/course_info/{{ course.id }}">{{ course.course_name.capitalize() }}</a></li>
                 {% endif %}
                 </ul>
             {% endfor %}
@@ -20,30 +20,53 @@
 </div>
 
 <div class="col-md-9">
-    <h1>Инженерная механика</h1>
-    <div class="col-md-offset-2 col-md-3">
-        <ul class="list-group">
-            <li class="list-group-item"><strong>Сроки запуска курса:</strong></li>
-            <li class="list-group-item"><strong>Количество слушателей:</strong></li>
-            <li class="list-group-item"><strong>Количество платных:</strong></li>
-            <li class="list-group-item"><strong>Количество студентов:</strong></li>
-        </ul>
+    <div class="col-md-offset-3 col-md-6">
+        <h1>{{ course_name.capitalize() }}</h1>
     </div>
-    <div class="col-md-3">
-        <ul class="list-group">
-            <li class="list-group-item">11 сентября 2018 - 04 февраля 2019 </li>
-            <li class="list-group-item">5034</li>
-            <li class="list-group-item">124</li>
-            <li class="list-group-item">800</li>
-        </ul>
+
+    <div class="col-md-offset-2 col-md-6">
+        <table class="bordered" width="100%">
+            <tr>
+                <td>Последняя доступная выгрузка:</td>
+                <td>{{ session_name }} -
+                    <script type="text/javascript">
+                        document.write(moment("{{ time_report }}", "YYYY-MM-DD").format("DD.MM.YYYY"));
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td>Общее количество слушателей:</td>
+                <td>{{ stud_list[0] }}</td>
+            </tr>
+            <tr>
+                <td>Количество слушателей на треке с прокторингом:</td>
+                <td>{{ stud_list[1] }}</td>
+            </tr>
+            <tr>
+                <td>Количество студентов:</td>
+                <td>{{ stud_list[2] }}</td>
+            </tr>
+
+
+        </table>
     </div>
     <div class="col-md-9">
         <h4>Доступные выгрузки по курсу</h4>
-        <ul>
-            <li>fall_2018 - 10.09.2018 (Посмотреть график)</li>
-            <li>fall_2018 - 17.09.2018 (Посмотреть график)</li>
-            <li>fall_2018 - 24.09.2018 (Посмотреть график)</li>
-        </ul>
+            <div class="col-md-6" style="height:100px;">
+                <ul>
+                    {% for report in reports_list %}
+                        <li>
+                            {{ report.session.session_name }} -
+                                <script type="text/javascript">
+                                     document.write(moment("{{ report.date_report }}", "YYYY-MM-DD").format("DD.MM.YYYY"));
+                                </script>
+                                <a href="/chart/{{report.id}}">
+                                    (Посмотреть график)
+                                </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+        </div>
     </div>
 
 </div>

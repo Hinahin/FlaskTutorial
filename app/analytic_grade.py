@@ -17,9 +17,11 @@ def stud_counts(file_name):
                     row['Cohort Name'] != 'Группа по умолчанию':   # or 'verified' or 'Группа по умолчанию'
                 st_st += 1
 
-        print('Количество слушателей на курсе:', st_count)
-        print('Количество слушателей на треке с прокторингом:', st_vf)
-        print('Количество студентов УрФУ:', st_st)
+        # print('Количество слушателей на курсе:', st_count)
+        # print('Количество слушателей на треке с прокторингом:', st_vf)
+        # print('Количество студентов УрФУ:', st_st)
+
+        return [st_count, st_vf, st_st]
 
 
 def get_empty_dict(file_name):
