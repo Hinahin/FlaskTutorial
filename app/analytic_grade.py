@@ -99,8 +99,6 @@ def grade_from_str(str_list):
 
 def data_from_filename(file_name):
 
-    # urfu_INTROBE_spring_2018_grade_report_2018-07-03-0643.csv
-    # urfu_Inclus_M1_fall_2019_test_grade_report_2020-02-03-0713.csv
     data_list = file_name.split(sep='_')
     final_list = list()
     if data_list[2] == "spring" or data_list[2] == "fall":
@@ -117,5 +115,3 @@ def data_from_filename(file_name):
         final_list.append(data_report)
 
     return final_list
-
-# stud_counts('engm.csv')
