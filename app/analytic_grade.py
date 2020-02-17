@@ -101,15 +101,15 @@ def data_from_filename(file_name):
 
     data_list = file_name.split(sep='_')
     final_list = list()
-    if data_list[2] == "spring" or data_list[2] == "fall":
+    if data_list[2] == "spring" or data_list[2] == "fall" or data_list[2] == "winter":
         final_list.append(data_list[1].lower())  # шифр курса
-        final_list.append((data_list[2] + '_' + data_list[3]).lower())  # сессия курса
+        final_list.append((data_list[2].lower() + '_' + data_list[3]).lower())  # сессия курса
         data_list = data_list[-1].split(sep='-')
         data_report = date(int(data_list[0]), int(data_list[1]), int(data_list[2]))  # создаем объект Date
         final_list.append(data_report)
-    elif data_list[3] == "spring" or data_list[3] == "fall":
+    elif data_list[3] == "spring" or data_list[3] == "fall" or data_list[3] == "winter":
         final_list.append(data_list[1].lower() + "_" + data_list[2].lower())  # шифр курса
-        final_list.append((data_list[3] + '_' + data_list[4]).lower())  # сессия курса
+        final_list.append((data_list[3].lower() + '_' + data_list[4]).lower())  # сессия курса
         data_list = data_list[-1].split(sep='-')
         data_report = date(int(data_list[0]), int(data_list[1]), int(data_list[2]))  # создаем объект Date
         final_list.append(data_report)

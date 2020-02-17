@@ -99,7 +99,7 @@ def add_report():
 
         try:
             data_list = ag.data_from_filename(file_report)
-
+            # course = CourseList.query.filter_by_or_404(course_code=data_list[0])
             course = CourseList.query.filter(CourseList.course_code.contains(data_list[0])).first()
             # report.course_name = data_list[0]           # Шифр курса
             report.course_name = course.course_name
