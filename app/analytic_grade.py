@@ -1,6 +1,8 @@
 import csv
 from datetime import date
 
+FILE_TEST_CSV = 'urfu_MCS_spring_2020_grade_report_2020-03-30-1245.csv'
+
 
 def stud_counts(file_name):
     with open(file_name, 'r', encoding='utf-8') as f:
@@ -24,7 +26,7 @@ def stud_counts(file_name):
         return [st_count, st_vf, st_st]
 
 
-def get_empty_dict(file_name):
+def get_empty_dict(file_name: str):
     with open(file_name, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
         row = next(reader)
@@ -38,23 +40,28 @@ def get_empty_dict(file_name):
         else:
             end_col = row.index('Enrollment Track')
         course_dict = {}
+        order_list = []
         for i in range(start_col, end_col):
             if row[i] == 'Grade Percent' or 'Avg' in row[i] or 'None' in row[i]:
                 continue
             else:
+                order_list.append(row[i])
                 course_dict[row[i]] = {
                     'Не приступал': 0,
                     'Неудовлетворительно': 0,
                     'Удовлетворительно': 0,
                     'Хорошо': 0,
                     'Отлично': 0,
-            }
-    return course_dict
+                }
+        order_list.append(order_list[0])
+        order_list.pop(0)
+    return [course_dict, order_list]    # возвращаем словарь и порядок столбцов из выгрузки
 
 
-def fillinig_dict(file_name, dict_name='none'):
+def fillinig_dict(file_name: str, dict_name='none'):
     if dict_name == 'none':
-        dict_name1 = get_empty_dict(file_name)
+        dict_name1 = get_empty_dict(file_name)[0]
+        order_list = get_empty_dict(file_name)[1]
     else:
         dict_name1 = dict_name
 
@@ -72,7 +79,7 @@ def fillinig_dict(file_name, dict_name='none'):
                     dict_name1[i]['Хорошо'] += 1
                 elif float(row[i]) >= 0.8:
                     dict_name1[i]['Отлично'] += 1
-        return dict_name1
+        return [dict_name1, order_list]
 
 
 def name_from_str(str_list):
@@ -121,3 +128,9 @@ def data_from_filename(file_name):
         final_list.append(data_report)
 
     return final_list
+
+
+if __name__ == "__main__":
+    print('Hello')
+    print(get_empty_dict(FILE_TEST_CSV)[0])
+    print(get_empty_dict(FILE_TEST_CSV)[1])
