@@ -26,6 +26,30 @@ def stud_counts(file_name):
         return [st_count, st_vf, st_st]
 
 
+def get_order_list(file_name: str):
+    with open(file_name, 'r', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        row = next(reader)
+        if 'Grade' in row:
+            start_col = row.index('Grade')
+        else:
+            start_col = row.index('grade')
+        # start_col = row.index('Grade')
+        if 'Cohort Name' in row:
+            end_col = row.index('Cohort Name')
+        else:
+            end_col = row.index('Enrollment Track')
+        order_list = []
+        for i in range(start_col, end_col):
+            if row[i] == 'Grade Percent' or 'Avg' in row[i] or 'None' in row[i]:
+                continue
+            else:
+                order_list.append(row[i])
+        order_list.append(order_list[0])
+        order_list.pop(0)
+    return order_list   # возвращаем порядок столбцов из выгрузки
+
+
 def get_empty_dict(file_name: str):
     with open(file_name, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
@@ -55,13 +79,12 @@ def get_empty_dict(file_name: str):
                 }
         order_list.append(order_list[0])
         order_list.pop(0)
-    return [course_dict, order_list]    # возвращаем словарь и порядок столбцов из выгрузки
+    return course_dict  # возвращаем словарь и порядок столбцов из выгрузки
 
 
-def fillinig_dict(file_name: str, dict_name='none'):
+def filling_dict(file_name: str, dict_name='none'):
     if dict_name == 'none':
-        dict_name1 = get_empty_dict(file_name)[0]
-        order_list = get_empty_dict(file_name)[1]
+        dict_name1 = get_empty_dict(file_name)
     else:
         dict_name1 = dict_name
 
@@ -79,7 +102,7 @@ def fillinig_dict(file_name: str, dict_name='none'):
                     dict_name1[i]['Хорошо'] += 1
                 elif float(row[i]) >= 0.8:
                     dict_name1[i]['Отлично'] += 1
-        return [dict_name1, order_list]
+        return dict_name1
 
 
 def name_from_str(str_list):
@@ -132,5 +155,6 @@ def data_from_filename(file_name):
 
 if __name__ == "__main__":
     print('Hello')
-    print(get_empty_dict(FILE_TEST_CSV)[0])
-    print(get_empty_dict(FILE_TEST_CSV)[1])
+    date_list = "2020-03-30 00:00:00".split()[0].split(sep="-")
+    print(lambda x: x + 1)
+

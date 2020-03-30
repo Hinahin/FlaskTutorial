@@ -4,7 +4,13 @@
 <script src="{{ url_for('static', filename='highcharts.js') }}"></script>
 <script src="{{ url_for('static', filename='exporting.js') }}"></script>
 <script src="{{ url_for('static', filename='export-data.js') }}"></script>
-
+<center>
+    <h4>
+        <script type="text/javascript">
+            document.write(moment("{{ report_date }}", "YYYY-MM-DD").format("DD.MM.YYYY"));
+        </script>
+    </h4>
+</center>
 <div id="container" style="min-width: 600px; height: 800px; margin: 0 auto"></div>
 
 <script type="text/javascript">
@@ -14,7 +20,7 @@
   },
   title: {
     text: '{{ x_title.capitalize() }}'
-  },
+   },
   xAxis: {
     categories:
     [

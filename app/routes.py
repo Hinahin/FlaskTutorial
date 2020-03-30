@@ -1,5 +1,6 @@
 from app import app, db
 import os
+import datetime
 from flask import render_template, flash, redirect, url_for, request
 from . import analytic_grade as ag
 from app.forms import LoginForm, RegistrationForm, GradeReportForm
@@ -32,6 +33,7 @@ def chart(report_id):
     bad = ag.grade_from_str(report.c_grade)
     fail = ag.grade_from_str(report.f_grade)
     x_title = report.course_name
+    report_date = report.date_report
     title = 'Chart'
 
     return render_template('chart.html',
@@ -42,6 +44,7 @@ def chart(report_id):
                            fail=fail,
                            x_title=x_title,
                            title=title,
+                           report_date=report_date,
                            )
 
 
@@ -127,8 +130,8 @@ def add_report():
             return redirect(url_for('add_report'))
 
         try:
-            grade_dict = ag.fillinig_dict(file_dir)[0]    # os.path.join(app.root_path, 'uploads', file_report)
-            order_list = ag.fillinig_dict(file_dir)[1]
+            grade_dict = ag.filling_dict(file_dir)    # os.path.join(app.root_path, 'uploads', file_report)
+            order_list = ag.get_order_list(file_dir)
             categories = []
             excellent = []
             good = []
